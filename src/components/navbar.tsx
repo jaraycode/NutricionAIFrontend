@@ -3,7 +3,11 @@ import logo from '../assets/logo.svg';
 import Button from './button';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+type NavbarProps = {
+  showButtons?: boolean;
+};
+
+const Navbar: React.FC<NavbarProps> = ({showButtons = true}) => {
     const navigate = useNavigate();
 
 function handleClick( event: React.MouseEvent<HTMLButtonElement>) {
@@ -25,10 +29,13 @@ function handleClick( event: React.MouseEvent<HTMLButtonElement>) {
             </div>
 
         </div>
+        {showButtons && (
         <div className="space-x-4 flex">
-            <Button type='outline' onClick={handleClick}>Iniciar Sesión</Button>
-            <Button type='solid' onClick={handleClick}>Registrarse</Button>
-        </div>
+        <Button type='outline' onClick={handleClick}>Iniciar Sesión</Button>
+        <Button type='solid' onClick={handleClick}>Registrarse</Button>
+    </div>
+        )}
+
       </div>
     </nav>
   );
