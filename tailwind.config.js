@@ -1,6 +1,8 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./public/index.html",
+  ],
   theme: {
     extend: {
       colors: {
@@ -24,7 +26,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Open Sans', 'ui-sans-serif', 'system-ui'], // Default Open Sans
+        openSans: ['Open Sans', 'sans-serif'],
       },
       fontSize: {
         'p1-regular': ['1.25rem', '1.6875rem'], // 20px, 27px
@@ -38,13 +40,10 @@ module.exports = {
         'h2-bold': ['3.625rem', '2.375rem'],   // 58px, 38px
       },
       fontWeight: {
-        regular: 400,
-        bold: 700,
+        normal: '400',
+        bold: '700',
       },
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [],
 }

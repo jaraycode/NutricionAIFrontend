@@ -1,10 +1,18 @@
+import Navbar from './components/navbar';
 import './index.css';
 
 function App() {
   return (
     <>
-      <div className="text-center text-2xl">
-        Hello, from App
+
+      <div
+        style={{
+          height: '1620px',
+          backgroundImage: 'url(src/assets/homeRectangle.svg)',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <Navbar />
       </div>
     </>
   )
