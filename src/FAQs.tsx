@@ -1,13 +1,13 @@
 import './index.css';
 
-function App() {
+function FAQs() {
   return (
     <>
       <div className="text-center text-2xl">
-        Hello, from App
+        Hello, from FAQs
       </div>
     </>
   )
 }
 
-export default App
+export default FAQs
