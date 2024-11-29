@@ -2,6 +2,7 @@ import '../index.css';
 import Navbar from '../components/navbar';
 import Placeholder from '../components/placeholder';
 import React from 'react';
+import userIcon from '../assets/userIcon.svg';
 
 function Login() {
   const [inputValue, setInputValue] = React.useState('');
@@ -43,6 +44,7 @@ function Login() {
         <Placeholder label='Nombre' 
         placeholder='ABC'
         value={inputValue}
+        icon={<img src={userIcon} alt='user icon' />}
         onChange={handleInputChange}
         />
 
