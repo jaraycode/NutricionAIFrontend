@@ -1,18 +1,15 @@
 // import { useState } from 'react'
+import AppRouter from './router/AppRouter'
+import { AuthProvider } from './router/AuthContext'
 
-import './App.css'
+// import './App.css'
 
 function App() {
 
   return (
-    <>
-      <p>
-        Hola Mundo
-      </p>
-      <button>
-        Aceptar
-      </button>
-    </>
+    <AuthProvider>
+      <AppRouter/>
+    </AuthProvider>
   )
 }
 
