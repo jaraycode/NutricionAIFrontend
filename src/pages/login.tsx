@@ -1,8 +1,9 @@
 import '../index.css';
 import Navbar from '../components/navbar';
-import Placeholder from '../components/placeholder';
+import TextField from '../components/textfield';
 import React from 'react';
-import userIcon from '../assets/userIcon.svg';
+import messageIcon from '../assets/messageIcon.svg';
+import passwordIcon from '../assets/passwordIcon.svg';
 
 function Login() {
   const [inputValue, setInputValue] = React.useState('');
@@ -29,6 +30,7 @@ function Login() {
       </div>
      
       <div
+        className='space-y-10'
         style={{
           marginTop: '10.75rem',
           marginLeft: '6.32rem',
@@ -39,15 +41,24 @@ function Login() {
           width: '24.43rem',
         }}
       >
-        <h3 className='text-h3-bold font-bold text-center'>Registrarse</h3>
-        <div>
-        <Placeholder label='Nombre' 
-        placeholder='ABC'
+        <h3 className='text-h3-bold font-bold text-center'>Iniciar Sesión</h3>
+        <div className='space-y-10'>
+        <TextField label='Correo Electrónico' 
+        placeholder='abc@gmail.com'
         value={inputValue}
-        icon={<img src={userIcon} alt='user icon' />}
+        icon={<img src={messageIcon} alt='user icon' />}
         onChange={handleInputChange}
         />
 
+        <TextField label='Clave' 
+        placeholder='clave1234'
+        value={inputValue}
+        icon={''}
+        onChange={handleInputChange}
+        />
+        <p>
+          <a href="/" className='text-p4-regular text-primary-darkGreen'>¿Olvidaste tu contraseña?</a>
+        </p>
         </div>
 
 

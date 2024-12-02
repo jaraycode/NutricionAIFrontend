@@ -1,6 +1,6 @@
 import React from "react";
 
-type PlaceholderProps = {
+type TextFieldProps = {
   placeholder?: string;
   label?: string;
   value?: string;
@@ -8,7 +8,7 @@ type PlaceholderProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const Placeholder: React.FC<PlaceholderProps> = ({
+const TextField: React.FC<TextFieldProps> = ({
   label,
   placeholder,
   value,
@@ -18,7 +18,7 @@ const Placeholder: React.FC<PlaceholderProps> = ({
   const [isFocused, setIsFocused] = React.useState(false);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <label className="text-p2-regular text-black-black">{label}</label>
       <div style={{position:'relative', display: 'flex', alignItems: 'center'}}>
         <input
@@ -33,6 +33,7 @@ const Placeholder: React.FC<PlaceholderProps> = ({
             padding: "0.4rem",
             outline: "none",
           }}
+          className="text-p4-regular text-black-200"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         ></input>
@@ -42,4 +43,4 @@ const Placeholder: React.FC<PlaceholderProps> = ({
   );
 };
 
-export default Placeholder;
+export default TextField;
