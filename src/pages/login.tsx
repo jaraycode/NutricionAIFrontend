@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import '../index.css';
 import Navbar from '../components/navbar';
 import Placeholder from '../components/placeholder';
@@ -57,3 +58,18 @@ function Login() {
 }
 
 export default Login;
+=======
+
+function Login(){
+
+    return(
+        <div>
+            <p>
+                Estoy en Login
+            </p>
+        </div>
+    )
+}
+
+export default Login
+>>>>>>> sebas
