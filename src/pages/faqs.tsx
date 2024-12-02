@@ -1,13 +1,13 @@
+import '../index.css';
 
-function Faqs(){
-
-    return(
-        <div>
-            <h1>
-                Faqs
-            </h1>
-        </div>
-    )
+function FAQs() {
+  return (
+    <>
+      <div className="text-center text-2xl">
+        Hello, from FAQs
+      </div>
+    </>
+  )
 }
 
-export default Faqs
+export default FAQs
