@@ -1,28 +1,35 @@
 import React from "react";
+import passwordHiddenIcon from "../assets/passwordHiddenIcon.svg";
+import passwordUnhiddenIcon from "../assets/passwordUnhiddenIcon.svg";
 
-type TextFieldProps = {
+type PasswordTextFieldProps = {
   placeholder?: string;
   label?: string;
   value?: string;
-  icon?: React.ReactNode;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const TextField: React.FC<TextFieldProps> = ({
+const PasswordTextField: React.FC<PasswordTextFieldProps> = ({
   label,
   placeholder,
   value,
-  icon,
   onChange,
 }) => {
   const [isFocused, setIsFocused] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="space-y-1">
       <label className="text-p2-regular text-black-black">{label}</label>
-      <div style={{position:'relative', display: 'flex', alignItems: 'center'}}>
+      <div
+        style={{ position: "relative", display: "flex", alignItems: "center" }}
+      >
         <input
-          type="text"
+          type={showPassword ? "text" : "password"}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
@@ -32,16 +39,24 @@ const TextField: React.FC<TextFieldProps> = ({
             borderRadius: "0.4rem",
             padding: "0.4rem",
             outline: "none",
-            color: "#000000"
+            color: "#000000",
           }}
           className="text-p4-regular text-black-200"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         ></input>
-        {icon && <div style={{position: 'absolute', right: '1rem', pointerEvents: 'none'}}>{icon}</div>}
+        <div
+          onClick={handleTogglePassword}
+          style={{ position: "absolute", right: "1rem", cursor: "pointer" }}
+        >
+          <img
+            src={showPassword ? passwordUnhiddenIcon : passwordHiddenIcon}
+            alt="Toggle Password Visibility"
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export default TextField;
+export default PasswordTextField;

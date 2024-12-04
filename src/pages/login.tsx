@@ -3,16 +3,21 @@ import Navbar from '../components/navbar';
 import TextField from '../components/textfield';
 import React from 'react';
 import messageIcon from '../assets/messageIcon.svg';
-import passwordIcon from '../assets/passwordIcon.svg';
+import PasswordTextField from '../components/passwordTextfield';
 
 function Login() {
-  const [inputValue, setInputValue] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setInputValue(newValue);
-    console.log('Input value:', newValue);
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const email = event.target.value;
+    setEmail(email);
   };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const password = event.target.value;
+    setPassword(password);
+  }
 
   return (
     <>
@@ -45,16 +50,15 @@ function Login() {
         <div className='space-y-10'>
         <TextField label='Correo Electrónico' 
         placeholder='abc@gmail.com'
-        value={inputValue}
+        value={email}
         icon={<img src={messageIcon} alt='user icon' />}
-        onChange={handleInputChange}
+        onChange={handleEmailChange}
         />
 
-        <TextField label='Clave' 
+        <PasswordTextField label='Clave' 
         placeholder='clave1234'
-        value={inputValue}
-        icon={''}
-        onChange={handleInputChange}
+        value={password}
+        onChange={handlePasswordChange}
         />
         <p>
           <a href="/" className='text-p4-regular text-primary-darkGreen'>¿Olvidaste tu contraseña?</a>
