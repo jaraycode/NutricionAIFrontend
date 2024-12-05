@@ -63,7 +63,7 @@ function Login() {
           />
           <div>
             <PasswordTextField
-              label="Clave"
+              label="Contraseña"
               placeholder="clave1234"
               value={password}
               onChange={handlePasswordChange}
