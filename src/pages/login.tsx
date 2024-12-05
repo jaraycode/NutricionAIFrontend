@@ -3,7 +3,7 @@ import Navbar from "../components/navbar";
 import TextField from "../components/textfield";
 import React from "react";
 import messageIcon from "../assets/messageIcon.svg";
-import PasswordTextField from "../components/passwordTextfield";
+import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
 
 function Login() {
