@@ -5,8 +5,10 @@ import React from "react";
 import messageIcon from "../assets/messageIcon.svg";
 import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -21,7 +23,7 @@ function Login() {
   };
 
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    console.log("Button clicked");
+    navigate("/dashboard");
   }
 
   return (

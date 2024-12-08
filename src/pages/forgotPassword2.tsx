@@ -3,28 +3,30 @@ import Navbar from "../components/navbar";
 import React from "react";
 import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
+import { useNavigate } from "react-router-dom";
 
 function forgotPassword2() {
+  const navigate = useNavigate();
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-
-
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const password = event.target.value;
     setPassword(password);
   };
 
-  const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleConfirmPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const password = event.target.value;
     setConfirmPassword(password);
   };
 
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    if(password && confirmPassword){
-        if(password=== confirmPassword){
-            console.log("a")
-        }
+    if (password && confirmPassword) {
+      if (password === confirmPassword) {
+        navigate("/login");
+      }
     }
   }
 
@@ -41,7 +43,7 @@ function forgotPassword2() {
           zIndex: 1,
         }}
       >
-        <Navbar showButtons={false} />
+        <Navbar showButtons={false}/>
       </div>
 
       <div
@@ -66,7 +68,7 @@ function forgotPassword2() {
             value={password}
             onChange={handlePasswordChange}
           />
-                    <PasswordTextField
+          <PasswordTextField
             label="Confirmar Contraseña"
             placeholder="clave1234"
             value={confirmPassword}

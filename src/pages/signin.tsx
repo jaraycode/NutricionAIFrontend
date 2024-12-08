@@ -41,7 +41,7 @@ function Signin() {
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
     if (name && email && password && confirmPassword) {
       if (password === confirmPassword) {
-        console.log("a");
+        navigate("/dashboard");
       }
     }
   }
