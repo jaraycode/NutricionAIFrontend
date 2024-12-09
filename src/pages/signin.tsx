@@ -106,13 +106,13 @@ function Signin() {
 
           <div className="space-y-5">
             <Button type="solid" button="secondary" onClick={onClick}>
-              Iniciar sesión
+              Registrarse
             </Button>
 
             <p className="text-black-600 text-p-2 text-center">
               ¿Ya tienes una cuenta?{" "}
               <a className="text-primary-darkGreen" href="/login">
-                Regístrarse
+                Iniciar Sesión
               </a>
             </p>
           </div>
