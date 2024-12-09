@@ -5,39 +5,10 @@ import settingsIcon from "../assets/settingsIcon.svg";
 import logOutIcon from "../assets/logOutIcon.svg";
 import scanIcon from "../assets/scanIcon.svg";
 import calendarIcon from "../assets/calendarIcon.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigation } from "../navigationContext";
 
 const Sidebar: React.FC = () => {
-  const navigate = useNavigate();
-  const [activeItem, setActiveItem] = useState<string>("dashboard");
-
-  const handleItemClick = (item: string) => {
-    setActiveItem(item);
-  };
-
-  switch (activeItem) {
-    case "dashboard":
-      navigate("/dashboard");
-      break;
-
-    case "scan":
-      navigate("/scan"); 
-      break;
-    case "transactions":
-      navigate("/transactions");
-      break;
-
-    case "settings":
-      navigate("/settings");
-      break;
-
-    case "logout":
-      navigate("/");
-      break;
-
-    default:
-      break;
-  }
+  const { activeItem, navigateTo } = useNavigation();
 
   return (
     <div className="w-33 h-full fixed top-[4.125rem] left-0 p-4 bg-black-white">
@@ -46,7 +17,7 @@ const Sidebar: React.FC = () => {
           <SidebarComponent
             icon={dashboardIcon}
             isActive={activeItem === "dashboard"}
-            onClick={() => handleItemClick("dashboard")}
+            onClick={() => navigateTo("dashboard")}
           >
             Tablero
           </SidebarComponent>
@@ -55,7 +26,7 @@ const Sidebar: React.FC = () => {
           <SidebarComponent
             icon={scanIcon}
             isActive={activeItem === "scan"}
-            onClick={() => handleItemClick("scan")}
+            onClick={() => navigateTo("scan")}
           >
             Escanear Alimento
           </SidebarComponent>
@@ -64,7 +35,7 @@ const Sidebar: React.FC = () => {
           <SidebarComponent
             icon={calendarIcon}
             isActive={activeItem === "transactions"}
-            onClick={() => handleItemClick("transactions")}
+            onClick={() => navigateTo("transactions")}
           >
             Consultar Fecha
           </SidebarComponent>
@@ -73,7 +44,7 @@ const Sidebar: React.FC = () => {
           <SidebarComponent
             icon={settingsIcon}
             isActive={activeItem === "settings"}
-            onClick={() => handleItemClick("settings")}
+            onClick={() => navigateTo("settings")}
           >
             Configuración
           </SidebarComponent>
@@ -82,7 +53,7 @@ const Sidebar: React.FC = () => {
           <SidebarComponent
             icon={logOutIcon}
             isActive={activeItem === "logout"}
-            onClick={() => handleItemClick("logout")}
+            onClick={() => navigateTo("logout")}
           >
             Cerrar Sesión
           </SidebarComponent>
