@@ -2,7 +2,7 @@ import "../index.css";
 import Navbar2 from "../components/navbar2";
 import Sidebar from "../components/sidebar";
 
-function Dashboard() {
+function Scan() {
   return (
     <>
       <Navbar2 />
@@ -21,11 +21,11 @@ function Dashboard() {
         }}
       >
         <h3 className="text-h3-bold font-bold text-primary-darkGreen ">
-           Estadísticas del Día
+           Escanea un Alimento
         </h3>
       </div>
     </>
   );
 }
 
-export default Dashboard;
+export default Scan;
