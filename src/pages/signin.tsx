@@ -74,7 +74,7 @@ function Signin() {
           width: "24.43rem",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-center">Regístrarse</h3>
+        <h3 className="text-h3-bold font-bold text-center">Registrarse</h3>
         <div className="space-y-10">
           <TextField
             label="Nombre"
