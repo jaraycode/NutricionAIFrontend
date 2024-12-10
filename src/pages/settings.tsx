@@ -7,7 +7,7 @@ function settings() {
     <>
       <Navbar2 />
       <Sidebar />
-      <div className="ml-1/3 p-49 bg-black-100 min-h-screen">
+      <div className="flex items-center justify-center ml-1/3 p-49 bg-black-100 min-h-screen">
       </div>
       <div
         style={{
@@ -20,7 +20,8 @@ function settings() {
           width: "24.43rem",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-primary-darkGreen ">
+      
+        <h3 className="text-h3-bold font-bold text-primary-darkGreen">
            Configura
         </h3>
       </div>
