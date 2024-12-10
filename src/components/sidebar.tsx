@@ -5,7 +5,7 @@ import settingsIcon from "../assets/settingsIcon.svg";
 import logOutIcon from "../assets/logOutIcon.svg";
 import scanIcon from "../assets/scanIcon.svg";
 import calendarIcon from "../assets/calendarIcon.svg";
-import { useNavigation } from "../navigationContext";
+import { useNavigation } from "../NavigationContext";
 
 const Sidebar: React.FC = () => {
   const { activeItem, navigateTo } = useNavigation();

@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface NavigationContextProps {
-  activeItem: string;
-  setActiveItem: (item: string) => void;
+  activeItem: string | null;
+  setActiveItem: (item: string | null) => void;
   navigateTo: (item: string) => void;
 }
 
@@ -15,14 +15,24 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate();
-  const [activeItem, setActiveItem] = useState<string>("dashboard");
+  const [activeItem, setActiveItem] = useState<string | null>(
+    localStorage.getItem("activeItem")
+  );
+
+  useEffect(() => {
+    if (activeItem) {
+      localStorage.setItem("activeItem", activeItem);
+    } else {
+      localStorage.removeItem("activeItem");
+    }
+  }, [activeItem]);
 
   const navigateTo = (item: string) => {
-    setActiveItem(item);
     if (item === "logout") {
       setActiveItem("dashboard");
       navigate("/");
     } else {
+      setActiveItem(item);
       navigate(`/${item}`);
     }
   };

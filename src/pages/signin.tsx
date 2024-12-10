@@ -74,7 +74,7 @@ function Signin() {
           width: "24.43rem",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-center">Regístrarse</h3>
+        <h3 className="text-h3-bold font-bold text-center">Registrarse</h3>
         <div className="space-y-10">
           <TextField
             label="Nombre"
@@ -106,13 +106,13 @@ function Signin() {
 
           <div className="space-y-5">
             <Button type="solid" button="secondary" onClick={onClick}>
-              Iniciar sesión
+              Registrarse
             </Button>
 
             <p className="text-black-600 text-p-2 text-center">
               ¿Ya tienes una cuenta?{" "}
               <a className="text-primary-darkGreen" href="/login">
-                Regístrarse
+                Iniciar Sesión
               </a>
             </p>
           </div>

@@ -7,8 +7,8 @@ function Dashboard() {
     <>
       <Navbar2 />
       <Sidebar />
-      <div className="ml-1/3 p-49 bg-black-100 min-h-screen">
-      </div>
+      <div className="ml-1/3 p-49 bg-black-100 min-h-screen"></div>
+
       <div
         style={{
           marginTop: "5.75rem",
@@ -21,7 +21,7 @@ function Dashboard() {
         }}
       >
         <h3 className="text-h3-bold font-bold text-primary-darkGreen ">
-           Estadísticas del Día
+          Estadísticas del Día
         </h3>
       </div>
     </>
