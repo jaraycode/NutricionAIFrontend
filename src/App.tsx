@@ -1,21 +1,21 @@
-import Navbar from './components/navbar';
-import './index.css';
+import Navbar from "./components/navbar";
+import "./index.css";
 
 function App() {
   return (
     <>
-
       <div
         style={{
-          height: '1620px',
-          backgroundImage: 'url(src/assets/homeRectangle.svg)',
-          backgroundRepeat: 'no-repeat',
+          height: "1620px",
+          backgroundImage: "url(src/assets/homeRectangle.svg)",
+          backgroundRepeat: "no-repeat",
+   
         }}
       >
-        <Navbar />
+        <Navbar showButtons={true} />
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,30 +1,14 @@
 import "../index.css";
 import Navbar from "../components/navbar";
-import TextField from "../components/textfield";
 import React from "react";
-import messageIcon from "../assets/messageIcon.svg";
 import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
-import userIcon from "../assets/userIcon.svg";
 import { useNavigate } from "react-router-dom";
 
-function Signin() {
+function forgotPassword2() {
   const navigate = useNavigate();
-
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const name = event.target.value;
-    setName(name);
-  };
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const email = event.target.value;
-    setEmail(email);
-  };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const password = event.target.value;
@@ -39,9 +23,9 @@ function Signin() {
   };
 
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    if (name && email && password && confirmPassword) {
+    if (password && confirmPassword) {
       if (password === confirmPassword) {
-        navigate("/dashboard");
+        navigate("/login");
       }
     }
   }
@@ -59,7 +43,7 @@ function Signin() {
           zIndex: 1,
         }}
       >
-        <Navbar showButtons={false} />
+        <Navbar showButtons={false}/>
       </div>
 
       <div
@@ -74,52 +58,29 @@ function Signin() {
           width: "24.43rem",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-center">Registrarse</h3>
+        <h3 className="text-h3-bold font-bold text-center">
+          Ingresa la nueva contraseña
+        </h3>
         <div className="space-y-10">
-          <TextField
-            label="Nombre"
-            placeholder="ABC"
-            value={name}
-            icon={<img src={userIcon} alt="user icon" />}
-            onChange={handleNameChange}
-          />
-          <TextField
-            label="Correo Electrónico"
-            placeholder="abc@gmail.com"
-            value={email}
-            icon={<img src={messageIcon} alt="user icon" />}
-            onChange={handleEmailChange}
-          />
           <PasswordTextField
-            label="Contraseña"
+            label="Nueva Contraseña"
             placeholder="clave1234"
             value={password}
             onChange={handlePasswordChange}
           />
-
           <PasswordTextField
             label="Confirmar Contraseña"
             placeholder="clave1234"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
           />
-
-          <div className="space-y-5">
-            <Button type="solid" button="secondary" onClick={onClick}>
-              Registrarse
-            </Button>
-
-            <p className="text-black-600 text-p-2 text-center">
-              ¿Ya tienes una cuenta?{" "}
-              <a className="text-primary-darkGreen" href="/login">
-                Iniciar Sesión
-              </a>
-            </p>
-          </div>
         </div>
+        <Button type="solid" button="secondary" onClick={onClick}>
+          Confirmar
+        </Button>
       </div>
     </>
   );
 }
 
-export default Signin;
+export default forgotPassword2;

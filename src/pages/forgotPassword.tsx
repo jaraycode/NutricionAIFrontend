@@ -3,27 +3,22 @@ import Navbar from "../components/navbar";
 import TextField from "../components/textfield";
 import React from "react";
 import messageIcon from "../assets/messageIcon.svg";
-import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
 
-function Login() {
+function forgotPassword() {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const email = event.target.value;
     setEmail(email);
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const password = event.target.value;
-    setPassword(password);
-  };
-
   function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    navigate("/dashboard");
+    if(email){
+      navigate("/forgotPassword2")
+    }
   }
 
   return (
@@ -54,7 +49,7 @@ function Login() {
           width: "24.43rem",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-center">Iniciar Sesión</h3>
+        <h3 className="text-h3-bold font-bold text-center">Olvidé mi contraseña</h3>
         <div className="space-y-10">
           <TextField
             label="Correo Electrónico"
@@ -63,34 +58,14 @@ function Login() {
             icon={<img src={messageIcon} alt="user icon" />}
             onChange={handleEmailChange}
           />
-          <div>
-            <PasswordTextField
-              label="Contraseña"
-              placeholder="clave1234"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-            <div style={{ textAlign: "right" }}>
-              <p>
-                <a
-                  href="/forgotPassword"
-                  className="text-p4-regular text-primary-darkGreen"
-                >
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </p>
-            </div>
-          </div>
           <div className="space-y-5">
             <Button type="solid" button="secondary" onClick={onClick}>
-              Iniciar sesión
+              Reestablecer Contraseña
             </Button>
 
             <p className="text-black-600 text-p-2 text-center">
-              ¿No tienes una cuenta?{" "}
-              <a className="text-primary-darkGreen" href="/signin">
-                Regístrate
-              </a>
+              Ingresa a tu correo electrónico para obtener instrucciones
+              de cómo recuperar tu contraseña
             </p>
           </div>
         </div>
@@ -99,4 +74,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default forgotPassword;
