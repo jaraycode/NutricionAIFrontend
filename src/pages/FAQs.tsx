@@ -92,7 +92,7 @@ function FAQs() {
             ))}
           </section>
         </div>
-        <div style={{  marginTop: "-13rem", marginLeft: "-7rem" }}>
+        <div style={{  marginTop: "-13rem" }}>
           <img src="src/assets/naranjas.svg" alt="naranjas" style={{height:"1000px",borderRadius:"10%"}}/>
         </div>
       </div>
