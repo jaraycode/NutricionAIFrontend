@@ -7,7 +7,7 @@ function Dashboard() {
     <>
       <Navbar2 />
       <Sidebar />
-      <div className="ml-1/3 p-49 bg-black-100 min-h-screen"></div>
+      <div className="ml-33 top-[4.125rem] bg-black-100"></div>
 
       <div
         style={{
