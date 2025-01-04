@@ -1,5 +1,5 @@
 import "../index.css";
-import Navbar2 from "../components/navbar2";
+import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
 
 function Transactions() {
