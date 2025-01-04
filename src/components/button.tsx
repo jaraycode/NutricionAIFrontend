@@ -3,7 +3,7 @@ import React from 'react';
 
 type ButtonProps = {
   type?: 'solid' | 'outline'; // Optional, defaults to 'solid'
-  button?: 'primary' | 'secondary';
+  button?: 'primary' | 'secondary' | 'error';
   children: React.ReactNode; // Content inside the button
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
@@ -12,16 +12,18 @@ const Button: React.FC<ButtonProps> = ({ type = 'solid', button, children, onCli
  var  buttonClasses;
 
  if (button === 'primary') {
-    buttonClasses = 'px-4';
+    buttonClasses = 'px-4 bg-primary-darkGreen';
   } else if (button === 'secondary') {
-    buttonClasses = 'w-full';
+    buttonClasses = 'w-full bg-primary-darkGreen';
+  }else if (button === 'error') {
+    buttonClasses = 'w-full bg-secondary-red';
   }
 
   const baseStyles =
     'py-4 h-6 rounded-md text-p2-bold transition-all duration-200 flex items-center justify-center';
 
   const types = {
-    solid: 'bg-primary-darkGreen text-white hover:bg-opacity-90',
+    solid: 'text-white hover:bg-opacity-90',
     outline:
       'bg-transparent text-primary-darkGreen border border-primary-darkGreen hover:bg-primary-darkGreen hover:text-white',
   };

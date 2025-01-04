@@ -80,7 +80,7 @@ function Settings() {
                     Guardar
                   </Button>
 
-                  <Button type="solid" button="secondary" onClick={onClick}>
+                  <Button type="solid" button="error" onClick={onClick}>
                     Borrar Cuenta
                   </Button>
                 </div>
