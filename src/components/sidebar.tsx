@@ -11,7 +11,7 @@ const Sidebar: React.FC = () => {
   const { activeItem, navigateTo } = useNavigation();
 
   return (
-    <div className="w-33 h-full fixed top-[4.125rem] left-0 p-4 bg-black-white">
+    <div className="w-1/5 h-full fixed top-[4.125rem] left-0 p-4 bg-black-white">
       <ul className="space-y-4 pt-8">
         <li>
           <SidebarComponent
