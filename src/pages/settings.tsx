@@ -41,14 +41,14 @@ function Settings() {
   }
 
   return (
-    <>
+    <div>
       <Navbar2 />
       <div className="flex">
         <div className="w-1/5">
           <Sidebar />
         </div>
         <div className="w-4/5 mt-[4.125rem] bg-black-100 min-h-screen flex items-center justify-center">
-          <div className="bg-white shadow-md rounded-[25px] p-6 w-full max-w-2xl border border-gray-300">
+          <div className="bg-white shadow-md rounded-[25px] p-6 w-full max-w-2xl border border-gray-300 max-h-1036">
             <h3 className="text-h3-bold font-bold text-primary-darkGreen mb-4 text-center">
               Configuración
             </h3>
@@ -75,6 +75,29 @@ function Settings() {
                   onChange={handlePasswordChange}
                 />
 
+                <TextField
+                  label="Meta de calorías diaria (kcal)"
+                  placeholder="0.00"
+                  value={email}
+                  infoMessage="Calcula tu tasa metabólica basal en la siguiente página y toma una decisión en base a tus necesidades."
+                  infoLinkURL="https://es.calcuworld.com/salud/metabolismo-basal/"
+                  onChange={handleEmailChange}
+                />
+                <TextField
+                  label="Meta de proteínas diaria (g)"
+                  placeholder="0"
+                  value={email}
+                  infoMessage="La Organización Mundial de la Salud (OMS) recomienda consumir al menos 0,8 gramos de proteína por kilogramo de peso corporal al día. Pero puedes modificarlo en base a tus requerimientos. "
+                  onChange={handleEmailChange}
+                />
+                <TextField
+                  label="Meta de grasas diaria (g)"
+                  placeholder="0"
+                  infoMessage="La Organización Mundial de la Salud (OMS) recomienda que el consumo de grasas no supere el 30% de las calorías totales diarias."
+                  value={email}
+                  onChange={handleEmailChange}
+                />
+
                 <div className="space-y-5">
                   <Button type="solid" button="secondary" onClick={onClick}>
                     Guardar
@@ -89,7 +112,7 @@ function Settings() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
