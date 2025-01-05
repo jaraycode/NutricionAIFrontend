@@ -18,14 +18,14 @@ const InfoIcon: React.FC<InfoIconProps> = ({ message, linkUrl }) => {
       <img src={infoIcon} alt="info icon" className="cursor-pointer" />
 
       {isHovered  && (
-        <div className="absolute bottom-full bg-white text-black text-xs rounded py-1 px-2 shadow-lg group-hover:block min-w-[20rem]"
+        <div className="absolute bottom-full bg-white text-black text-p5-regular rounded py-1 px-2 shadow-lg group-hover:block min-w-[20rem]"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         >
           {message}
           {"\n"}
           {linkUrl && (
-            <a href={linkUrl} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer"
+            <a href={linkUrl} className="text-blue-500 underline " target="_blank" rel="noopener noreferrer"
             >
               {linkUrl}
             </a>

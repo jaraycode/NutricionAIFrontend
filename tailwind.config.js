@@ -36,6 +36,7 @@ module.exports = {
         'p3-regular': ['1.5rem', '2.0625rem'], // 24px, 33px
         'p4-regular': ['0.875rem', '1.1875rem'], // 14px, 19px
         'p5-regular': ['1rem', '1.375rem'],    // 16px, 22px
+        'p6-regular': ['0.75rem', '1.0625rem'], // 12px, 17px
         'h3-bold': ['1.75rem', '2.375rem'],    // 28px, 38px
         'h2-bold': ['3.625rem', '2.375rem'],   // 58px, 38px
       },
