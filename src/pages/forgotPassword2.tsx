@@ -1,11 +1,11 @@
-import "../index.css";
-import Navbar from "../components/navbar";
 import React from "react";
-import PasswordTextField from "../components/passwordTextField";
-import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/button";
+import Navbar from "../components/navbar";
+import PasswordTextField from "../components/passwordTextField";
+import "../index.css";
 
-function forgotPassword2() {
+const ForgotPassword2 = () => {
   const navigate = useNavigate();
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
@@ -22,7 +22,7 @@ function forgotPassword2() {
     setConfirmPassword(password);
   };
 
-  function onClick(e: React.MouseEvent<HTMLButtonElement>) {
+  function onClick() {
     if (password && confirmPassword) {
       if (password === confirmPassword) {
         navigate("/login");
@@ -43,7 +43,7 @@ function forgotPassword2() {
           zIndex: 1,
         }}
       >
-        <Navbar showButtons={false}/>
+        <Navbar showButtons={false} />
       </div>
 
       <div
@@ -81,6 +81,6 @@ function forgotPassword2() {
       </div>
     </>
   );
-}
+};
 
-export default forgotPassword2;
+export default ForgotPassword2;

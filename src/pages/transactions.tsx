@@ -1,7 +1,7 @@
-import "../index.css";
+import { useState } from "react";
 import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
-import React, { useState } from "react";
+import "../index.css";
 
 interface Meal {
   time: string;

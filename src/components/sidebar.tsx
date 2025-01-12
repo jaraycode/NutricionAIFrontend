@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import SidebarComponent from "./sidebarComponent";
+import React from "react";
+import calendarIcon from "../assets/calendarIcon.svg";
 import dashboardIcon from "../assets/dashboardIcon.svg";
-import settingsIcon from "../assets/settingsIcon.svg";
 import logOutIcon from "../assets/logOutIcon.svg";
 import scanIcon from "../assets/scanIcon.svg";
-import calendarIcon from "../assets/calendarIcon.svg";
+import settingsIcon from "../assets/settingsIcon.svg";
 import { useNavigation } from "../NavigationContext";
+import SidebarComponent from "./sidebarComponent";
 
 const Sidebar: React.FC = () => {
   const { activeItem, navigateTo } = useNavigation();

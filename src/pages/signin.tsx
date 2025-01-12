@@ -1,12 +1,13 @@
-import "../index.css";
-import Navbar from "../components/navbar";
-import TextField from "../components/textfield";
 import React from "react";
-import messageIcon from "../assets/messageIcon.svg";
-import PasswordTextField from "../components/passwordTextField";
-import Button from "../components/button";
-import userIcon from "../assets/userIcon.svg";
 import { useNavigate } from "react-router-dom";
+import messageIcon from "../assets/messageIcon.svg";
+import userIcon from "../assets/userIcon.svg";
+import Button from "../components/button";
+import Navbar from "../components/navbar";
+import PasswordTextField from "../components/passwordTextField";
+import TextField from "../components/textfield";
+import "../index.css";
+// import envs from "../lib/config";
 
 function Signin() {
   const navigate = useNavigate();
@@ -15,6 +16,9 @@ function Signin() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [caloriesPerDay, setCaloriesPerDay] = React.useState(0);
+  const [fatPerDay, setFatPerDay] = React.useState(0);
+  const [proteinPerDay, setProteinPerDay] = React.useState(0);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -38,9 +42,80 @@ function Signin() {
     setConfirmPassword(password);
   };
 
-  function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    if (name && email && password && confirmPassword) {
+  const handleCaloriesPerDayChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const calories = event.target.value;
+    setCaloriesPerDay(Number(calories));
+  };
+
+  const handleFatPerDayChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const fat = event.target.value;
+    setFatPerDay(Number(fat));
+  };
+
+  const handleProteinPerDayChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const protein = event.target.value;
+    setProteinPerDay(Number(protein));
+  };
+
+  const handleRegister = async (
+    email: string,
+    password: string,
+    name: string,
+    caloriesPerDay: number,
+    fatPerDay: number,
+    proteinPerDay: number
+  ) => {
+    try {
+      const formData = {
+        name,
+        email,
+        password,
+        role: "USER",
+        config: { caloriesPerDay, fatPerDay, proteinPerDay },
+      };
+      // const link: string = envs.baseURL as string;
+      const link: string = "http://127.0.0.1:8888";
+      const response = await fetch(`${link}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
+
+  function onClick() {
+    if (
+      name &&
+      email &&
+      password &&
+      confirmPassword &&
+      caloriesPerDay &&
+      proteinPerDay &&
+      fatPerDay
+    ) {
       if (password === confirmPassword) {
+        const registerData = handleRegister(
+          email,
+          password,
+          name,
+          caloriesPerDay,
+          fatPerDay,
+          proteinPerDay
+        );
+        localStorage.setItem("user", JSON.stringify(registerData));
         navigate("/dashboard");
       }
     }
@@ -89,6 +164,27 @@ function Signin() {
             value={email}
             icon={<img src={messageIcon} alt="user icon" />}
             onChange={handleEmailChange}
+          />
+          <TextField
+            label="Meta de Calorias Diarias"
+            placeholder="abc@gmail.com"
+            value={caloriesPerDay.toString()}
+            icon={<img src={messageIcon} alt="user icon" />}
+            onChange={handleCaloriesPerDayChange}
+          />
+          <TextField
+            label="Meta de Grasas Diarias"
+            placeholder="abc@gmail.com"
+            value={fatPerDay.toString()}
+            icon={<img src={messageIcon} alt="user icon" />}
+            onChange={handleFatPerDayChange}
+          />
+          <TextField
+            label="Meta de Proteinas Diarias"
+            placeholder="abc@gmail.com"
+            value={proteinPerDay.toString()}
+            icon={<img src={messageIcon} alt="user icon" />}
+            onChange={handleProteinPerDayChange}
           />
           <PasswordTextField
             label="Contraseña"

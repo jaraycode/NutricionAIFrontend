@@ -1,9 +1,11 @@
-import "../index.css";
+import { useEffect, useState } from "react";
+import { BarChart } from "../components/barChart";
 import Navbar2 from "../components/navbar2.tsx";
-import Sidebar from "../components/sidebar";
 import { ProgressCircle } from "../components/progressCircle.tsx";
-import { BarChart } from "../components/barChart"
-import React, { useEffect, useState } from "react";
+import Sidebar from "../components/sidebar";
+import "../index.css";
+import { ChartData, User, months } from "../lib/types.ts";
+// import envs from "../lib/config.ts";
 
 // const chartdata = [
 //   {
@@ -68,10 +70,8 @@ import React, { useEffect, useState } from "react";
 //   },
 // ]
 
-
-
 const Dashboard = () => {
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
   const [progressData, setProgressData] = useState({
     caloriasMeta: 0,
     caloriasConsumidas: 0,
@@ -85,9 +85,34 @@ const Dashboard = () => {
     // Función para obtener los datos de la API
     const fetchData = async () => {
       try {
-        const response = await fetch("https://api.example.com/chartdata");
-        const data = await response.json();
-        setChartData(data);
+        // Guardar informacion de usuario logeado en cache
+        const link: string = import.meta.env.BASE_URL;
+        const response = await fetch(`${link}/user/1`);
+        const data: User = await response.json();
+
+        let grasasConsumidas = 0;
+        let proteinasConsumidas = 0;
+        let caloriasConsumidas = 0;
+        const chart: ChartData[] = [];
+
+        if (data.food != null) {
+          for (const month of months) {
+            for (const value of data.food) {
+              // Hacer if de que la fecha coincida con el mes
+              grasasConsumidas += value.calories;
+              proteinasConsumidas += value.protein;
+              caloriasConsumidas += value.calories;
+            }
+            chart.push({
+              month: month,
+              fatConsumidas: grasasConsumidas,
+              proteinConsumidas: proteinasConsumidas,
+              caloriesConsumidas: caloriasConsumidas,
+            });
+          }
+        }
+
+        setChartData(chart);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
       }
@@ -95,9 +120,32 @@ const Dashboard = () => {
 
     const fetchProgressData = async () => {
       try {
-        const response = await fetch("https://api.example.com/progressdata");
-        const data = await response.json();
-        setProgressData(data);
+        const link: string = import.meta.env.BASE_URL;
+        const response = await fetch(`${link}/user/1`);
+        const data: User = await response.json();
+
+        let grasasConsumidas = 0;
+        let proteinasConsumidas = 0;
+        let caloriasConsumidas = 0;
+
+        if (data.food != null) {
+          for (const value of data.food) {
+            // Hacer if de que la fecha coincida con el dia de hoy
+            grasasConsumidas += value.calories;
+            proteinasConsumidas += value.protein;
+            caloriasConsumidas += value.calories;
+          }
+        }
+
+        const progress = {
+          caloriasMeta: data.Configuration.caloriesPerDay,
+          caloriasConsumidas: caloriasConsumidas,
+          grasasMeta: data.Configuration.fatPerDay,
+          grasasConsumidas: grasasConsumidas,
+          proteinasMeta: data.Configuration.proteinPerDay,
+          proteinasConsumidas: proteinasConsumidas,
+        };
+        setProgressData(progress);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
       }
@@ -108,9 +156,12 @@ const Dashboard = () => {
   }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   // Calcular los valores de los ProgressCircle
-  const caloriasValue = (progressData.caloriasConsumidas / progressData.caloriasMeta) * 100;
-  const grasasValue = (progressData.grasasConsumidas / progressData.grasasMeta) * 100;
-  const proteinasValue = (progressData.proteinasConsumidas / progressData.proteinasMeta) * 100;
+  const caloriasValue =
+    (progressData.caloriasConsumidas / progressData.caloriasMeta) * 100;
+  const grasasValue =
+    (progressData.grasasConsumidas / progressData.grasasMeta) * 100;
+  const proteinasValue =
+    (progressData.proteinasConsumidas / progressData.proteinasMeta) * 100;
 
   return (
     <>
@@ -132,98 +183,158 @@ const Dashboard = () => {
           minHeight: "calc(100vh - 5.75rem)",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-primary-darkGreen " style={{alignSelf: "flex-start"}}>
+        <h3
+          className="text-h3-bold font-bold text-primary-darkGreen "
+          style={{ alignSelf: "flex-start" }}
+        >
           Estadísticas del Día
         </h3>
 
-        <section className="Metas" style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "1rem",
-          marginTop: "2.5rem",
-          marginBottom: "2.5rem",
-          width: "60%",
-        }}>
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "white",
-            borderRadius: "0.35rem",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            padding: "1.25rem",
-          }}>
-            <h4>
-              Calorias (Kcal)
-            </h4>
-            <p style={{color:"red", fontSize:"50px", fontWeight:"bold"}}>{progressData.caloriasMeta}</p>
+        <section
+          className="Metas"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "1rem",
+            marginTop: "2.5rem",
+            marginBottom: "2.5rem",
+            width: "60%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "white",
+              borderRadius: "0.35rem",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              padding: "1.25rem",
+            }}
+          >
+            <h4>Calorias (Kcal)</h4>
+            <p style={{ color: "red", fontSize: "50px", fontWeight: "bold" }}>
+              {progressData.caloriasMeta}
+            </p>
           </div>
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "white",
-            borderRadius: "0.35rem",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            padding: "1.25rem",
-          }}>
-            <h4>
-              Grasas (gr)
-            </h4>
-            <p style={{color:"green", fontSize:"50px", fontWeight:"bold"}}>{progressData.grasasMeta}</p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "white",
+              borderRadius: "0.35rem",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              padding: "1.25rem",
+            }}
+          >
+            <h4>Grasas (gr)</h4>
+            <p style={{ color: "green", fontSize: "50px", fontWeight: "bold" }}>
+              {progressData.grasasMeta}
+            </p>
           </div>
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "white",
-            borderRadius: "0.35rem",
-            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            padding: "1.25rem",
-          }}>
-            <h4>
-              Proteinas (gr)
-            </h4>
-            <p style={{color:"blue", fontSize:"50px", fontWeight:"bold"}}>{progressData.proteinasMeta}</p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundColor: "white",
+              borderRadius: "0.35rem",
+              boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+              padding: "1.25rem",
+            }}
+          >
+            <h4>Proteinas (gr)</h4>
+            <p style={{ color: "blue", fontSize: "50px", fontWeight: "bold" }}>
+              {progressData.proteinasMeta}
+            </p>
           </div>
         </section>
 
-        <section style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          marginBottom: "2.5rem",
-          width: "60%",
-          backgroundColor: "white",
-          borderRadius: "1rem",
-          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-          padding: "1.25rem",
-        }}>
-          <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <ProgressCircle variant={"error"} value={caloriasValue} radius={80} strokeWidth={20} className="mx-auto">
+        <section
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            marginBottom: "2.5rem",
+            width: "60%",
+            backgroundColor: "white",
+            borderRadius: "1rem",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            padding: "1.25rem",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ProgressCircle
+              variant={"error"}
+              value={caloriasValue}
+              radius={80}
+              strokeWidth={20}
+              className="mx-auto"
+            >
               <span>Calorias</span>
             </ProgressCircle>
-            <p style={{marginTop: "1rem"}}>{progressData.caloriasConsumidas} de {progressData.caloriasMeta}</p>
+            <p style={{ marginTop: "1rem" }}>
+              {progressData.caloriasConsumidas} de {progressData.caloriasMeta}
+            </p>
           </div>
-          <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <ProgressCircle variant={"success"} value={grasasValue} radius={80} strokeWidth={20} className="mx-auto">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ProgressCircle
+              variant={"success"}
+              value={grasasValue}
+              radius={80}
+              strokeWidth={20}
+              className="mx-auto"
+            >
               <span>Grasas</span>
             </ProgressCircle>
-            <p style={{marginTop: "1rem"}}>{progressData.grasasConsumidas} de {progressData.grasasMeta}</p>
+            <p style={{ marginTop: "1rem" }}>
+              {progressData.grasasConsumidas} de {progressData.grasasMeta}
+            </p>
           </div>
-          <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <ProgressCircle variant={"default"} value={proteinasValue} radius={80} strokeWidth={20} className="mx-auto">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <ProgressCircle
+              variant={"default"}
+              value={proteinasValue}
+              radius={80}
+              strokeWidth={20}
+              className="mx-auto"
+            >
               <span>Proteinas</span>
             </ProgressCircle>
-            <p style={{marginTop: "1rem"}}>{progressData.proteinasConsumidas} de {progressData.proteinasMeta}</p>
+            <p style={{ marginTop: "1rem" }}>
+              {progressData.proteinasConsumidas} de {progressData.proteinasMeta}
+            </p>
           </div>
         </section>
 
-        <section style={{
-          width: "90%",
-          backgroundColor: "white",
-          borderRadius: "1rem",
-          boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-          padding: "1.25rem",
-          marginBottom: "2.5rem",
-        }}>
-          <p style={{marginLeft:"2.5rem", fontWeight:"bold"}}>Valores nutricionales de la semana</p>
+        <section
+          style={{
+            width: "90%",
+            backgroundColor: "white",
+            borderRadius: "1rem",
+            boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+            padding: "1.25rem",
+            marginBottom: "2.5rem",
+          }}
+        >
+          <p style={{ marginLeft: "2.5rem", fontWeight: "bold" }}>
+            Valores nutricionales de la semana
+          </p>
           <BarChart
             className="h-80"
             data={chartData}
@@ -240,6 +351,6 @@ const Dashboard = () => {
       </div>
     </>
   );
-}
+};
 
 export default Dashboard;

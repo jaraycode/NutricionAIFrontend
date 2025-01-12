@@ -1,12 +1,12 @@
-import "../index.css";
-import Navbar from "../components/navbar";
-import TextField from "../components/textfield";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import messageIcon from "../assets/messageIcon.svg";
 import Button from "../components/button";
-import { useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar";
+import TextField from "../components/textfield";
+import "../index.css";
 
-function forgotPassword() {
+function ForgotPassword() {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
 
@@ -15,9 +15,9 @@ function forgotPassword() {
     setEmail(email);
   };
 
-  function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    if(email){
-      navigate("/forgotPassword2")
+  function onClick() {
+    if (email) {
+      navigate("/forgotPassword2");
     }
   }
 
@@ -49,7 +49,9 @@ function forgotPassword() {
           width: "24.43rem",
         }}
       >
-        <h3 className="text-h3-bold font-bold text-center">Olvidé mi contraseña</h3>
+        <h3 className="text-h3-bold font-bold text-center">
+          Olvidé mi contraseña
+        </h3>
         <div className="space-y-10">
           <TextField
             label="Correo Electrónico"
@@ -64,8 +66,8 @@ function forgotPassword() {
             </Button>
 
             <p className="text-black-600 text-p-2 text-center">
-              Ingresa a tu correo electrónico para obtener instrucciones
-              de cómo recuperar tu contraseña
+              Ingresa a tu correo electrónico para obtener instrucciones de cómo
+              recuperar tu contraseña
             </p>
           </div>
         </div>
@@ -74,4 +76,4 @@ function forgotPassword() {
   );
 }
 
-export default forgotPassword;
+export default ForgotPassword;

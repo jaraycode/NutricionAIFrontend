@@ -1,15 +1,17 @@
-import "../index.css";
+import { useState } from "react";
 import Navbar from "../components/navbar";
-import React, { useState } from 'react';
+import "../index.css";
 
 const faqs = [
   {
     question: "¿Cómo estimamos el valor nutricional?",
-    answer: "Utilizamos una combinación de datos de alimentos y algoritmos avanzados para estimar el valor nutricional de los alimentos."
+    answer:
+      "Utilizamos una combinación de datos de alimentos y algoritmos avanzados para estimar el valor nutricional de los alimentos.",
   },
   {
     question: "¿Qué es una dieta balanceada?",
-    answer: "Una dieta balanceada incluye una variedad de alimentos en las proporciones correctas para mantener la salud y el bienestar."
+    answer:
+      "Una dieta balanceada incluye una variedad de alimentos en las proporciones correctas para mantener la salud y el bienestar.",
   },
 ];
 
@@ -32,7 +34,7 @@ function FAQs() {
           zIndex: 1,
         }}
       >
-        <Navbar showButtons={false}/>
+        <Navbar showButtons={false} />
       </div>
 
       <div
@@ -54,8 +56,24 @@ function FAQs() {
           </h3>
           <section>
             {faqs.map((faq, index) => (
-              <div key={index} style={{ padding: "1rem", border: "3px solid green", borderRadius: "0.5rem", marginTop: "2rem", marginBottom: "1rem", width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div
+                key={index}
+                style={{
+                  padding: "1rem",
+                  border: "3px solid green",
+                  borderRadius: "0.5rem",
+                  marginTop: "2rem",
+                  marginBottom: "1rem",
+                  width: "100%",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <span>{faq.question}</span>
                   <button
                     onClick={() => handleToggle(index)}
@@ -74,26 +92,30 @@ function FAQs() {
                       boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.3)",
                     }}
                   >
-                    {openIndex === index ? 'v' : '>'}
+                    {openIndex === index ? "v" : ">"}
                   </button>
                 </div>
-                <div style={{
-                  maxHeight: openIndex === index ? "200px" : "0",
-                  overflow: "hidden",
-                  transition: "max-height 1s ease",
-                }}>
+                <div
+                  style={{
+                    maxHeight: openIndex === index ? "200px" : "0",
+                    overflow: "hidden",
+                    transition: "max-height 1s ease",
+                  }}
+                >
                   {openIndex === index && (
-                    <p style={{ marginTop: "1rem" }}>
-                      {faq.answer}
-                    </p>
+                    <p style={{ marginTop: "1rem" }}>{faq.answer}</p>
                   )}
                 </div>
               </div>
             ))}
           </section>
         </div>
-        <div style={{  marginTop: "-13rem" }}>
-          <img src="src/assets/naranjas.svg" alt="naranjas" style={{height:"1000px",borderRadius:"10%"}}/>
+        <div style={{ marginTop: "-13rem" }}>
+          <img
+            src="src/assets/naranjas.svg"
+            alt="naranjas"
+            style={{ height: "1000px", borderRadius: "10%" }}
+          />
         </div>
       </div>
     </>

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../index.css";
+import uploadIcon from "../assets/uploadIcon.svg";
 import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
-import uploadIcon from "../assets/uploadIcon.svg";
+import "../index.css";
 
 function Scan() {
   const [file, setFile] = useState<File | null>(null);
@@ -16,7 +16,15 @@ function Scan() {
     details:
       "Una hamburguesa es un sándwich que consiste en una o más hamburguesas cocidas de carne molida, generalmente de res, colocadas dentro de una rebanada de pan.",
   });
-
+  setNutritionData({
+    name: "Hamburguesa",
+    weight: 400,
+    protein: 450,
+    calories: 2000,
+    fats: 100,
+    details:
+      "Una hamburguesa es un sándwich que consiste en una o más hamburguesas cocidas de carne molida, generalmente de res, colocadas dentro de una rebanada de pan.",
+  });
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);

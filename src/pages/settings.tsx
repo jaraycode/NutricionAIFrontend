@@ -1,11 +1,11 @@
 import React from "react";
+import messageIcon from "../assets/messageIcon.svg";
+import userIcon from "../assets/userIcon.svg";
+import Button from "../components/button";
 import Navbar2 from "../components/navbar2";
+import PasswordTextField from "../components/passwordTextField";
 import Sidebar from "../components/sidebar";
 import TextField from "../components/textfield";
-import Button from "../components/button";
-import PasswordTextField from "../components/passwordTextField";
-import userIcon from "../assets/userIcon.svg";
-import messageIcon from "../assets/messageIcon.svg";
 import { useNavigation } from "../NavigationContext";
 
 function Settings() {
@@ -54,7 +54,7 @@ function Settings() {
     setDailyFats(dailyFats);
   };
 
-  function onClickSave(e: React.MouseEvent<HTMLButtonElement>) {
+  function onClickSave() {
     if (
       name &&
       email &&
@@ -67,7 +67,7 @@ function Settings() {
     }
   }
 
-  function onClickDelete(e: React.MouseEvent<HTMLButtonElement>) {
+  function onClickDelete() {
     const confirmed = window.confirm(
       "¿Estás seguro de que deseas borrar tu cuenta?"
     );

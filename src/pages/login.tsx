@@ -1,11 +1,12 @@
-import "../index.css";
-import Navbar from "../components/navbar";
-import TextField from "../components/textfield";
 import React from "react";
-import messageIcon from "../assets/messageIcon.svg";
-import PasswordTextField from "../components/passwordTextField";
-import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
+import messageIcon from "../assets/messageIcon.svg";
+import Button from "../components/button";
+import Navbar from "../components/navbar";
+import PasswordTextField from "../components/passwordTextField";
+import TextField from "../components/textfield";
+import "../index.css";
+// import envs from "../lib/config";
 
 function Login() {
   const navigate = useNavigate();
@@ -22,8 +23,34 @@ function Login() {
     setPassword(password);
   };
 
-  function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    navigate("/dashboard");
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const formData = { email: email, password: password };
+      // const link: string = envs.baseURL as string;
+      const link: string = "http://127.0.0.1:8888";
+      const response = await fetch(`${link}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
+
+  async function onClick() {
+    if (email && password) {
+      const loginData: { id: number; JWT: string } = await handleLogin(
+        email,
+        password
+      );
+      localStorage.setItem("user_id", JSON.stringify(loginData.id));
+      navigate("/dashboard");
+    }
   }
 
   return (
