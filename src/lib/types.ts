@@ -46,4 +46,4 @@ export interface ChartData {
   month: string;
 }
 
-export type month = "Jan" | "Feb" | "March";
+export const months = ["Jan", "Feb", "March"];
