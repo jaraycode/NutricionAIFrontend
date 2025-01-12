@@ -70,6 +70,8 @@ import { ChartData, User, months } from "../lib/types.ts";
 //   },
 // ]
 
+const userId = JSON.parse(localStorage.getItem("user_id") || "null");
+
 const Dashboard = () => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [progressData, setProgressData] = useState({
@@ -87,7 +89,7 @@ const Dashboard = () => {
       try {
         // Guardar informacion de usuario logeado en cache
         const link: string = import.meta.env.BASE_URL;
-        const response = await fetch(`${link}/user/1`);
+        const response = await fetch(`${link}/user/${userId}`);
         const data: User = await response.json();
 
         let grasasConsumidas = 0;
@@ -98,10 +100,17 @@ const Dashboard = () => {
         if (data.food != null) {
           for (const month of months) {
             for (const value of data.food) {
-              // Hacer if de que la fecha coincida con el mes
-              grasasConsumidas += value.calories;
-              proteinasConsumidas += value.protein;
-              caloriasConsumidas += value.calories;
+              const foodDate = new Date(value.createAt);
+              const foodMonth = foodDate.getMonth();
+              const foodYear = foodDate.getFullYear();
+              const [currentMonth, currentYear] = month.split(" ");
+              const monthIndex = months.indexOf(currentMonth);
+
+              if (foodMonth === monthIndex && foodYear === parseInt(currentYear)) {
+                grasasConsumidas += value.calories;
+                proteinasConsumidas += value.protein;
+                caloriasConsumidas += value.calories;
+              }
             }
             chart.push({
               month: month,
@@ -121,19 +130,23 @@ const Dashboard = () => {
     const fetchProgressData = async () => {
       try {
         const link: string = import.meta.env.BASE_URL;
-        const response = await fetch(`${link}/user/1`);
+        const response = await fetch(`${link}/user/${userId}`);
         const data: User = await response.json();
 
         let grasasConsumidas = 0;
         let proteinasConsumidas = 0;
         let caloriasConsumidas = 0;
+        
+        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
 
         if (data.food != null) {
           for (const value of data.food) {
-            // Hacer if de que la fecha coincida con el dia de hoy
-            grasasConsumidas += value.calories;
-            proteinasConsumidas += value.protein;
-            caloriasConsumidas += value.calories;
+            const foodDate = new Date(value.createAt).toISOString().split('T')[0]; // Obtener la fecha del alimento en formato YYYY-MM-DD
+            if (foodDate === today) {
+              grasasConsumidas += value.calories;
+              proteinasConsumidas += value.protein;
+              caloriasConsumidas += value.calories;
+            }
           }
         }
 
