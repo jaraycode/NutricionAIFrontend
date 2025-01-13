@@ -3,6 +3,7 @@ import uploadIcon from "../assets/uploadIcon.svg";
 import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
 import "../index.css";
+// import { APIResponse, ModelResponse } from "../lib/types.ts";
 
 function Scan() {
   const [file, setFile] = useState<File | null>(null);
@@ -25,9 +26,24 @@ function Scan() {
     details:
       "Una hamburguesa es un sándwich que consiste en una o más hamburguesas cocidas de carne molida, generalmente de res, colocadas dentro de una rebanada de pan.",
   });
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+      // try {
+      //   setFile(e.target.files[0]);
+      //   const link: string = import.meta.env.BASE_URL;
+      //   const response = await fetch(`${link}/food/image`, {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(file),
+      //   });
+      //   const data: APIResponse<ModelResponse> = await response.json();
+      //   console.log(data);
+      // } catch (error) {
+      //   console.log(error);
+      // }
     }
   };
 

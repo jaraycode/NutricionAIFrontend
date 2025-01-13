@@ -46,4 +46,31 @@ export interface ChartData {
   month: string;
 }
 
-export const months = ["Jan", "Feb", "Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+export const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+export interface ModelResponse {
+  name: string;
+}
+
+export interface APIResponse<T> {
+  detail: string;
+  result: T;
+}
+
+export interface APIResponseArray<T> {
+  detail: string;
+  result: T[];
+}

@@ -4,7 +4,7 @@ import Navbar2 from "../components/navbar2.tsx";
 import { ProgressCircle } from "../components/progressCircle.tsx";
 import Sidebar from "../components/sidebar";
 import "../index.css";
-import { ChartData, User, months } from "../lib/types.ts";
+import { APIResponse, ChartData, User, months } from "../lib/types.ts";
 // import envs from "../lib/config.ts";
 
 // const chartdata = [
@@ -70,8 +70,6 @@ import { ChartData, User, months } from "../lib/types.ts";
 //   },
 // ]
 
-const userId = JSON.parse(localStorage.getItem("user_id") || "null");
-
 const Dashboard = () => {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [progressData, setProgressData] = useState({
@@ -88,29 +86,21 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         // Guardar informacion de usuario logeado en cache
-        const link: string = import.meta.env.BASE_URL;
+        const link: string = "http://127.0.0.1:8000";
         const response = await fetch(`${link}/user/${userId}`);
-        const data: User = await response.json();
-
+        const data: APIResponse<User> = await response.json();
         let grasasConsumidas = 0;
         let proteinasConsumidas = 0;
         let caloriasConsumidas = 0;
         const chart: ChartData[] = [];
 
-        if (data.food != null) {
+        if (data.result.food != null) {
           for (const month of months) {
-            for (const value of data.food) {
-              const foodDate = new Date(value.createAt);
-              const foodMonth = foodDate.getMonth();
-              const foodYear = foodDate.getFullYear();
-              const [currentMonth, currentYear] = month.split(" ");
-              const monthIndex = months.indexOf(currentMonth);
-
-              if (foodMonth === monthIndex && foodYear === parseInt(currentYear)) {
-                grasasConsumidas += value.calories;
-                proteinasConsumidas += value.protein;
-                caloriasConsumidas += value.calories;
-              }
+            for (const value of data.result.food) {
+              // Hacer if de que la fecha coincida con el mes
+              grasasConsumidas += value.calories;
+              proteinasConsumidas += value.protein;
+              caloriasConsumidas += value.calories;
             }
             chart.push({
               month: month,
@@ -129,33 +119,29 @@ const Dashboard = () => {
 
     const fetchProgressData = async () => {
       try {
-        const link: string = import.meta.env.BASE_URL;
+        const link: string = "http://127.0.0.1:8000";
         const response = await fetch(`${link}/user/${userId}`);
-        const data: User = await response.json();
+        const data: APIResponse<User> = await response.json();
 
         let grasasConsumidas = 0;
         let proteinasConsumidas = 0;
         let caloriasConsumidas = 0;
-        
-        const today = new Date().toISOString().split('T')[0]; // Obtener la fecha de hoy en formato YYYY-MM-DD
 
-        if (data.food != null) {
-          for (const value of data.food) {
-            const foodDate = new Date(value.createAt).toISOString().split('T')[0]; // Obtener la fecha del alimento en formato YYYY-MM-DD
-            if (foodDate === today) {
-              grasasConsumidas += value.calories;
-              proteinasConsumidas += value.protein;
-              caloriasConsumidas += value.calories;
-            }
+        if (data.result.food != null) {
+          for (const value of data.result.food) {
+            // Hacer if de que la fecha coincida con el dia de hoy
+            grasasConsumidas += value.calories;
+            proteinasConsumidas += value.protein;
+            caloriasConsumidas += value.calories;
           }
         }
 
         const progress = {
-          caloriasMeta: data.Configuration.caloriesPerDay,
+          caloriasMeta: data.result.Configuration.caloriesPerDay,
           caloriasConsumidas: caloriasConsumidas,
-          grasasMeta: data.Configuration.fatPerDay,
+          grasasMeta: data.result.Configuration.fatPerDay,
           grasasConsumidas: grasasConsumidas,
-          proteinasMeta: data.Configuration.proteinPerDay,
+          proteinasMeta: data.result.Configuration.proteinPerDay,
           proteinasConsumidas: proteinasConsumidas,
         };
         setProgressData(progress);
