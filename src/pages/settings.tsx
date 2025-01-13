@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar2 from "../components/navbar2";
 import Sidebar from "../components/sidebar";
 import TextField from "../components/textfield";
@@ -7,6 +7,7 @@ import PasswordTextField from "../components/passwordTextField";
 import userIcon from "../assets/userIcon.svg";
 import messageIcon from "../assets/messageIcon.svg";
 import { useNavigation } from "../NavigationContext";
+import {useNavigate} from "react-router-dom";
 
 function Settings() {
   const [name, setName] = React.useState("");
@@ -17,6 +18,16 @@ function Settings() {
   const [dailyFats, setDailyFats] = React.useState("");
 
   const { navigateTo } = useNavigation();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/");
+    }
+  }, [navigate]);
+  
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;

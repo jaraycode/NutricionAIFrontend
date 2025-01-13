@@ -3,6 +3,8 @@ import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
 import { ProgressCircle } from "../components/progressCircle.tsx";
 import { BarChart } from "../components/barChart"
+import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 const chartdata = [
   {
@@ -70,6 +72,16 @@ const chartdata = [
 
 
 function Dashboard() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   return (
     <>
       <Navbar2 />

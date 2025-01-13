@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../index.css";
 import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
 import uploadIcon from "../assets/uploadIcon.svg";
+import { useNavigate } from "react-router-dom";
 
 function Scan() {
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/");
+    }
+  }, [navigate]);
+
+
   const [file, setFile] = useState<File | null>(null);
   const [foodWeight, setFoodWeight] = useState<string>("");
   const [nutritionData, setNutritionData] = useState({
