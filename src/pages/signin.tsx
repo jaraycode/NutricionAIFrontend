@@ -56,7 +56,7 @@ const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
           if (response.ok) {
             const message = await response.text();
             console.log(message); // Log the plain text message
-            localStorage.setItem("user", JSON.stringify({ name, email }));
+            localStorage.setItem("user", JSON.stringify({ email }));
             navigate("/dashboard");
           } else {
             console.error("Registration failed");

@@ -4,71 +4,81 @@ import Sidebar from "../components/sidebar";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface Meal {
-  time: string;
-  name: string;
-  weight: number;
-  calories: number;
-  protein: number;
-  fats: number;
-}
+type Meal = {
+  datetime: string;
+  foodname: string;
+  mass: number;
+  kcal: number;
+  proteins: number;
+  fat: number;
+};
 
-function Transactions() {
+const Transactions: React.FC = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState<string>(today);
+  const [meals, setMeals] = useState<Meal[]>([]);
+  const [filteredMeals, setFilteredMeals] = useState<Meal[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (!user) {
       navigate("/");
+    } else {
+      const email = JSON.parse(user).email;
+      fetchMeals(email);
     }
   }, [navigate]);
-  
-  const [date, setDate] = useState<string>("");
 
-  const meals: Meal[] = [
-    {
-      time: "08:00",
-      name: "Pan",
-      weight: 30,
-      calories: 120,
-      protein: 1,
-      fats: 1,
-    },
-    {
-      time: "13:00",
-      name: "Hamburguesa",
-      weight: 450,
-      calories: 2000,
-      protein: 150,
-      fats: 100,
-    },
-    {
-      time: "16:00",
-      name: "Pie de Manzana",
-      weight: 100,
-      calories: 300,
-      protein: 5,
-      fats: 20,
-    },
-    {
-      time: "18:00",
-      name: "Arepa",
-      weight: 60,
-      calories: 120,
-      protein: 10,
-      fats: 10,
-    },
-  ];
+  const fetchMeals = async (email: string) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/foods/${email}`
+      );
+      if (!response.ok) {
+        throw new Error("No se pudieron obtener los alimentos.");
+      }
+      const data = await response.json();
+      console.log(data); // Verifica si los datos se reciben correctamente
+      setMeals(data);
+      filterMealsByDate(new Date().toISOString().split("T")[0], data); // Filtrar comidas de la fecha actual
+    } catch (err) {
+      setError("Hubo un problema al obtener los alimentos.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const total = meals.reduce(
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = e.target.value;
+    setDate(selectedDate);
+    filterMealsByDate(selectedDate, meals);
+  };
+
+  const filterMealsByDate = (selectedDate: string, meals: Meal[]) => {
+    const filtered = meals.filter((meal) => {
+      if (meal.datetime && meal.datetime.startsWith(selectedDate)) {
+        return true;
+      }
+      return false;
+    });
+    setFilteredMeals(filtered);
+  };
+
+  const total = filteredMeals.reduce(
     (acc, meal) => ({
-      weight: acc.weight + meal.weight,
-      calories: acc.calories + meal.calories,
-      protein: acc.protein + meal.protein,
-      fats: acc.fats + meal.fats,
+      mass: acc.mass + (isNaN(meal.mass) ? 0 : parseFloat(meal.mass.toString())),
+      kcal: acc.kcal + (isNaN(meal.kcal) ? 0 : parseFloat(meal.kcal.toString())),
+      proteins: acc.proteins + (isNaN(meal.proteins) ? 0 : parseFloat(meal.proteins.toString())),
+      fat: acc.fat + (isNaN(meal.fat) ? 0 : parseFloat(meal.fat.toString())),
     }),
-    { weight: 0, calories: 0, protein: 0, fats: 0 }
+    { mass: 0, kcal: 0, proteins: 0, fat: 0 }
   );
+  
+  
+
   return (
     <div>
       <Navbar2 />
@@ -92,52 +102,64 @@ function Transactions() {
                 type="date"
                 id="date-picker"
                 value={date}
-                onChange={(e) => setDate(e.target.value)}
+                onChange={handleDateChange}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
               />
             </div>
-            <table className="w-full border-collapse bg-white rounded-lg shadow-md overflow-hidden">
-              <thead>
-                <tr className="bg-gray-100 text-left text-gray-700">
-                  <th className="px-4 py-2">Hora</th>
-                  <th className="px-4 py-2">Comida</th>
-                  <th className="px-4 py-2">Masa (gr)</th>
-                  <th className="px-4 py-2">Calorías (kcal)</th>
-                  <th className="px-4 py-2">Proteínas (gr)</th>
-                  <th className="px-4 py-2">Grasas (gr)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {meals.map((meal, index) => (
-                  <tr
-                    key={index}
-                    className={`hover:bg-gray-50 ${
-                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    }`}
-                  >
-                    <td className="px-4 py-2">{meal.time}</td>
-                    <td className="px-4 py-2">{meal.name}</td>
-                    <td className="px-4 py-2">{meal.weight}</td>
-                    <td className="px-4 py-2">{meal.calories}</td>
-                    <td className="px-4 py-2">{meal.protein}</td>
-                    <td className="px-4 py-2">{meal.fats}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse bg-white rounded-lg shadow-md overflow-hidden">
+                <thead>
+                  <tr className="bg-gray-100 text-left text-gray-700">
+                    <th className="px-4 py-2">Hora</th>
+                    <th className="px-4 py-2">Comida</th>
+                    <th className="px-4 py-2">Masa (gr)</th>
+                    <th className="px-4 py-2">Calorías (kcal)</th>
+                    <th className="px-4 py-2">Proteínas (gr)</th>
+                    <th className="px-4 py-2">Grasas (gr)</th>
                   </tr>
-                ))}
-                <tr className="font-bold text-green-700 bg-gray-100">
-                  <td className="px-4 py-2">Total</td>
-                  <td className="px-4 py-2"></td>
-                  <td className="px-4 py-2">{total.weight}</td>
-                  <td className="px-4 py-2 text-red-600">{total.calories}</td>
-                  <td className="px-4 py-2 text-red-600">{total.protein}</td>
-                  <td className="px-4 py-2 text-red-600">{total.fats}</td>
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredMeals.map((meal, index) => (
+                    <tr
+                      key={index}
+                      className={`hover:bg-gray-50 ${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      }`}
+                    >
+                      <td className="px-4 py-2">
+                        {new Date(meal.datetime).toLocaleTimeString()}
+                      </td>
+                      <td className="px-4 py-2">{meal.foodname}</td>
+                      <td className="px-4 py-2">{meal.mass}</td>
+                      <td className="px-4 py-2">{meal.kcal}</td>
+                      <td className="px-4 py-2">{meal.proteins}</td>
+                      <td className="px-4 py-2">{meal.fat}</td>
+                    </tr>
+                  ))}
+                  <tr className="font-bold text-green-700 bg-gray-100">
+                    <td className="px-4 py-2">Total</td>
+                    <td className="px-4 py-2"></td>
+                    <td className="px-4 py-2">
+                      {Number(total.mass).toFixed(2)}
+                    </td>
+                    <td className="px-4 py-2 text-red-600">
+                      {Number(total.kcal).toFixed(2)}
+                    </td>
+                    <td className="px-4 py-2 text-red-600">
+                      {Number(total.proteins).toFixed(2)}
+                    </td>
+                    <td className="px-4 py-2 text-red-600">
+                      {Number(total.fat).toFixed(2)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Transactions;

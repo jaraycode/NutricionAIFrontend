@@ -37,7 +37,7 @@ function Login() {
 
         if (response.ok) {
           const user = await response.text();
-          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("user", JSON.stringify({ email }));
           navigate("/dashboard");
         } else {
           console.error("Login failed");

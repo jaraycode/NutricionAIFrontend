@@ -40,6 +40,7 @@ const foodNutrition: FoodNutrition = {
 };
 
 function Scan() {
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -136,8 +137,7 @@ function Scan() {
   const handleSave = async () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const email = user.email;
-    const dateTime = new Date().toISOString();
-
+    const dateTime = new Date().toLocaleString('sv-SE').replace(' ', 'T');
     try {
       const response = await fetch(`${api_url}/foods`, {
         method: "POST",
