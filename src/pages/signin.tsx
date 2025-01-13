@@ -7,8 +7,11 @@ import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
 import userIcon from "../assets/userIcon.svg";
 import { useNavigate } from "react-router-dom";
+// Store the environment variable in a constant
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function Signin() {
+  console.log(apiUrl);
   const navigate = useNavigate();
 
   const [name, setName] = React.useState("");
@@ -38,13 +41,33 @@ function Signin() {
     setConfirmPassword(password);
   };
 
-  function onClick(e: React.MouseEvent<HTMLButtonElement>) {
+const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (name && email && password && confirmPassword) {
       if (password === confirmPassword) {
-        navigate("/dashboard");
+        try {
+          const response = await fetch(`${apiUrl}/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, password }),
+          });
+
+          if (response.ok) {
+            const message = await response.text();
+            console.log(message); // Log the plain text message
+            localStorage.setItem("user", JSON.stringify({ name, email }));
+            navigate("/dashboard");
+          } else {
+            console.error("Registration failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
       }
     }
-  }
+  };
+
 
   return (
     <>
