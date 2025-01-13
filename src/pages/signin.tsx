@@ -7,6 +7,7 @@ import Navbar from "../components/navbar";
 import PasswordTextField from "../components/passwordTextField";
 import TextField from "../components/textfield";
 import "../index.css";
+import { APIResponse, LogInUser } from "../lib/types";
 // import envs from "../lib/config";
 
 function Signin() {
@@ -80,7 +81,7 @@ function Signin() {
         config: { caloriesPerDay, fatPerDay, proteinPerDay },
       };
       // const link: string = envs.baseURL as string;
-      const link: string = "http://127.0.0.1:8888";
+      const link: string = "http://127.0.0.1:8000";
       const response = await fetch(`${link}/auth/register`, {
         method: "POST",
         headers: {
@@ -88,15 +89,15 @@ function Signin() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      console.log(data);
-      return data;
+      const data: APIResponse<LogInUser> = await response.json();
+      return data.result;
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+      return { id: 0, JWT: "" };
     }
   };
 
-  function onClick() {
+  async function onClick() {
     if (
       name &&
       email &&
@@ -107,7 +108,7 @@ function Signin() {
       fatPerDay
     ) {
       if (password === confirmPassword) {
-        const registerData = handleRegister(
+        const registerData: LogInUser = await handleRegister(
           email,
           password,
           name,
@@ -115,7 +116,7 @@ function Signin() {
           fatPerDay,
           proteinPerDay
         );
-        localStorage.setItem("user", JSON.stringify(registerData));
+        localStorage.setItem("session_object", JSON.stringify(registerData));
         navigate("/dashboard");
       }
     }

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import uploadIcon from "../assets/uploadIcon.svg";
 import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
@@ -6,6 +7,7 @@ import "../index.css";
 // import { APIResponse, ModelResponse } from "../lib/types.ts";
 
 function Scan() {
+  const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const [foodWeight, setFoodWeight] = useState<string>("");
   const [nutritionData, setNutritionData] = useState({
@@ -29,6 +31,7 @@ function Scan() {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+      console.log(file);
       // try {
       //   setFile(e.target.files[0]);
       //   const link: string = import.meta.env.BASE_URL;
@@ -57,6 +60,18 @@ function Scan() {
     console.log("Peso del alimento:", foodWeight);
     // Puedes llamar a tu API para obtener información nutricional aquí.
   };
+
+  useEffect(() => {
+    try {
+      const session = localStorage.getItem("session_object") ?? null;
+      if (session === null) {
+        throw new Error("Session does not exists");
+      }
+    } catch (error) {
+      console.log(error);
+      navigate("/login");
+    }
+  }, [navigate]);
   return (
     <div>
       <Navbar2 />

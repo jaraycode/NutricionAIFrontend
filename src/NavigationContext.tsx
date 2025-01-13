@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface NavigationContextProps {
@@ -30,6 +30,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
   const navigateTo = (item: string) => {
     if (item === "logout") {
       setActiveItem("dashboard");
+      localStorage.removeItem("session_object");
       navigate("/");
     } else {
       setActiveItem(item);

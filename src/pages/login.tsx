@@ -6,6 +6,7 @@ import Navbar from "../components/navbar";
 import PasswordTextField from "../components/passwordTextField";
 import TextField from "../components/textfield";
 import "../index.css";
+import { APIResponse, LogInUser } from "../lib/types";
 // import envs from "../lib/config";
 
 function Login() {
@@ -26,8 +27,7 @@ function Login() {
   const handleLogin = async (email: string, password: string) => {
     try {
       const formData = { email: email, password: password };
-      // const link: string = envs.baseURL as string;
-      const link: string = "http://127.0.0.1:8888";
+      const link: string = "http://127.0.0.1:8000";
       const response = await fetch(`${link}/auth/login`, {
         method: "POST",
         headers: {
@@ -35,21 +35,23 @@ function Login() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      return data;
+      const data: APIResponse<LogInUser> = await response.json();
+      return data.result;
     } catch (error) {
       console.error("Error al obtener los datos:", error);
+      return { id: 0, JWT: "" };
     }
   };
 
   async function onClick() {
     if (email && password) {
-      const loginData: { id: number; JWT: string } = await handleLogin(
-        email,
-        password
-      );
-      localStorage.setItem("user_id", JSON.stringify(loginData.id));
-      navigate("/dashboard");
+      try {
+        const loginData: LogInUser = await handleLogin(email, password);
+        localStorage.setItem("session_object", JSON.stringify(loginData));
+        navigate("/dashboard");
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 

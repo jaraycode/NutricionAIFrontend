@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import messageIcon from "../assets/messageIcon.svg";
 import userIcon from "../assets/userIcon.svg";
 import Button from "../components/button";
@@ -9,6 +10,7 @@ import TextField from "../components/textfield";
 import { useNavigation } from "../NavigationContext";
 
 function Settings() {
+  const navigate = useNavigate();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -76,6 +78,17 @@ function Settings() {
       navigateTo("logout");
     }
   }
+  useEffect(() => {
+    try {
+      const session = localStorage.getItem("session_object") ?? null;
+      if (session === null) {
+        throw new Error("Session does not exists");
+      }
+    } catch (error) {
+      console.log(error);
+      navigate("/login");
+    }
+  }, [navigate]);
 
   return (
     <div>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar2 from "../components/navbar2.tsx";
 import Sidebar from "../components/sidebar";
 import "../index.css";
@@ -13,6 +14,7 @@ interface Meal {
 }
 
 function Transactions() {
+  const navigate = useNavigate();
   const [date, setDate] = useState<string>("");
 
   const meals: Meal[] = [
@@ -59,6 +61,17 @@ function Transactions() {
     }),
     { weight: 0, calories: 0, protein: 0, fats: 0 }
   );
+  useEffect(() => {
+    try {
+      const session = localStorage.getItem("session_object") ?? null;
+      if (session === null) {
+        throw new Error("Session does not exists");
+      }
+    } catch (error) {
+      console.log(error);
+      navigate("/login");
+    }
+  }, [navigate]);
   return (
     <div>
       <Navbar2 />

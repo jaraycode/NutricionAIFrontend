@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BarChart } from "../components/barChart";
 import Navbar2 from "../components/navbar2.tsx";
 import { ProgressCircle } from "../components/progressCircle.tsx";
 import Sidebar from "../components/sidebar";
 import "../index.css";
-import { APIResponse, ChartData, User, months } from "../lib/types.ts";
+import {
+  APIResponse,
+  ChartData,
+  LogInUser,
+  User,
+  months,
+} from "../lib/types.ts";
 // import envs from "../lib/config.ts";
 
 // const chartdata = [
@@ -71,6 +78,7 @@ import { APIResponse, ChartData, User, months } from "../lib/types.ts";
 // ]
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [progressData, setProgressData] = useState({
     caloriasMeta: 0,
@@ -83,25 +91,24 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Función para obtener los datos de la API
-    const fetchData = async () => {
+    const fetchData = async (user: LogInUser) => {
       try {
         // Guardar informacion de usuario logeado en cache
         const link: string = "http://127.0.0.1:8000";
-        const response = await fetch(`${link}/user/${userId}`);
+        const response = await fetch(`${link}/user/${user.id}`);
         const data: APIResponse<User> = await response.json();
-        let grasasConsumidas = 0;
-        let proteinasConsumidas = 0;
-        let caloriasConsumidas = 0;
         const chart: ChartData[] = [];
 
-        if (data.result.food != null) {
-          for (const month of months) {
-            for (const value of data.result.food) {
-              // Hacer if de que la fecha coincida con el mes
+        months.forEach((month) => {
+          let grasasConsumidas = 0;
+          let proteinasConsumidas = 0;
+          let caloriasConsumidas = 0;
+          if (data.result.food != null) {
+            data.result.food.forEach((value) => {
               grasasConsumidas += value.calories;
               proteinasConsumidas += value.protein;
               caloriasConsumidas += value.calories;
-            }
+            });
             chart.push({
               month: month,
               fatConsumidas: grasasConsumidas,
@@ -109,7 +116,7 @@ const Dashboard = () => {
               caloriesConsumidas: caloriasConsumidas,
             });
           }
-        }
+        });
 
         setChartData(chart);
       } catch (error) {
@@ -117,10 +124,10 @@ const Dashboard = () => {
       }
     };
 
-    const fetchProgressData = async () => {
+    const fetchProgressData = async (user: LogInUser) => {
       try {
         const link: string = "http://127.0.0.1:8000";
-        const response = await fetch(`${link}/user/${userId}`);
+        const response = await fetch(`${link}/user/${user.id}`);
         const data: APIResponse<User> = await response.json();
 
         let grasasConsumidas = 0;
@@ -128,12 +135,11 @@ const Dashboard = () => {
         let caloriasConsumidas = 0;
 
         if (data.result.food != null) {
-          for (const value of data.result.food) {
-            // Hacer if de que la fecha coincida con el dia de hoy
+          data.result.food.forEach((value) => {
             grasasConsumidas += value.calories;
             proteinasConsumidas += value.protein;
             caloriasConsumidas += value.calories;
-          }
+          });
         }
 
         const progress = {
@@ -149,10 +155,20 @@ const Dashboard = () => {
         console.error("Error al obtener los datos:", error);
       }
     };
-
-    fetchData();
-    fetchProgressData();
-  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
+    try {
+      const session = localStorage.getItem("session_object") ?? null;
+      if (session === null) {
+        throw new Error("Session does not exists");
+      }
+      const user: LogInUser = JSON.parse(session as string);
+      console.log(user);
+      fetchData(user);
+      fetchProgressData(user);
+    } catch (error) {
+      console.log(error);
+      navigate("/login");
+    }
+  }, [navigate]); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   // Calcular los valores de los ProgressCircle
   const caloriasValue =
