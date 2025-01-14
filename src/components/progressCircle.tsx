@@ -1,9 +1,7 @@
-// Tremor ProgressCircle [v0.0.3]
+import React from "react";
+import { tv, VariantProps } from "tailwind-variants";
 
-import React from "react"
-import { tv, VariantProps } from "tailwind-variants"
-
-import { cx } from "../lib/utils"
+import { cx } from "../lib/utils";
 
 const progressCircleVariants = tv({
   slots: {
@@ -37,17 +35,17 @@ const progressCircleVariants = tv({
   defaultVariants: {
     variant: "default",
   },
-})
+});
 
 interface ProgressCircleProps
   extends Omit<React.SVGProps<SVGSVGElement>, "value">,
     VariantProps<typeof progressCircleVariants> {
-  value?: number
-  max?: number
-  showAnimation?: boolean
-  radius?: number
-  strokeWidth?: number
-  children?: React.ReactNode
+  value?: number;
+  max?: number;
+  showAnimation?: boolean;
+  radius?: number;
+  strokeWidth?: number;
+  children?: React.ReactNode;
 }
 
 const ProgressCircle = React.forwardRef<SVGSVGElement, ProgressCircleProps>(
@@ -55,22 +53,23 @@ const ProgressCircle = React.forwardRef<SVGSVGElement, ProgressCircleProps>(
     {
       value = 0,
       max = 100,
-      radius = 32,
-      strokeWidth = 6,
+      radius = 24, // Reducir el tamaño de los círculos a 24px
+      strokeWidth = 4, // Reducir el grosor del borde
       showAnimation = true,
       variant,
       className,
       children,
       ...props
     }: ProgressCircleProps,
-    forwardedRef,
+    forwardedRef
   ) => {
-    const safeValue = Math.min(max, Math.max(value, 0))
-    const normalizedRadius = radius - strokeWidth / 2
-    const circumference = normalizedRadius * 2 * Math.PI
-    const offset = circumference - (safeValue / max) * circumference
+    const safeValue = Math.min(max, Math.max(value, 0));
+    const normalizedRadius = radius - strokeWidth / 2;
+    const circumference = normalizedRadius * 2 * Math.PI;
+    const offset = circumference - (safeValue / max) * circumference;
 
-    const { background, circle } = progressCircleVariants({ variant })
+    const { background, circle } = progressCircleVariants({ variant });
+
     return (
       <div
         className={cx("relative")}
@@ -116,7 +115,7 @@ const ProgressCircle = React.forwardRef<SVGSVGElement, ProgressCircleProps>(
                 "transition-colors ease-linear",
                 circle(),
                 showAnimation &&
-                  "transform-gpu transition-all duration-300 ease-in-out",
+                  "transform-gpu transition-all duration-300 ease-in-out"
               )}
             />
           ) : null}
@@ -127,10 +126,10 @@ const ProgressCircle = React.forwardRef<SVGSVGElement, ProgressCircleProps>(
           {children}
         </div>
       </div>
-    )
-  },
-)
+    );
+  }
+);
 
-ProgressCircle.displayName = "ProgressCircle"
+ProgressCircle.displayName = "ProgressCircle";
 
-export { ProgressCircle, type ProgressCircleProps }
+export { ProgressCircle, type ProgressCircleProps };

@@ -7,27 +7,51 @@ import PasswordTextField from "../components/passwordTextField";
 import userIcon from "../assets/userIcon.svg";
 import messageIcon from "../assets/messageIcon.svg";
 import { useNavigation } from "../NavigationContext";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+const api_url = import.meta.env.VITE_API_URL;
 
 function Settings() {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [dailyCalories, setDailyCalories] = React.useState("");
-  const [dailyProteins, setDailyProteins] = React.useState("");
-  const [dailyFats, setDailyFats] = React.useState("");
+  const [dailyCalories, setDailyCalories] = React.useState<number>(0);
+  const [dailyProteins, setDailyProteins] = React.useState<number>(0);
+  const [dailyFats, setDailyFats] = React.useState<number>(0);
 
   const { navigateTo } = useNavigation();
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (!user) {
       navigate("/");
+      return;
     }
+    const parsedUser = JSON.parse(user);
+    setEmail(parsedUser.email);  // Set email from localStorage
+
+    // Fetch the user data based on email
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${api_url}/user/${parsedUser.email}`);
+        if (!response.ok) {
+          throw new Error("User not found");
+        }
+        const data = await response.json();
+        console.log(data);
+        setName(data.name || "");
+        setPassword(data.password || "");
+        setDailyCalories(parseFloat(data.kcalxday) || 0);
+        setDailyProteins(parseFloat(data.proteinxday) || 0);
+        setDailyFats(parseFloat(data.fatxday) || 0);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
   }, [navigate]);
-  
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -44,25 +68,48 @@ function Settings() {
     setPassword(password);
   };
 
-  const handleDailyCaloriesChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const dailyCalories = event.target.value;
+  const handleDailyCaloriesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const dailyCalories = parseFloat(event.target.value);
     setDailyCalories(dailyCalories);
   };
 
-  const handleDailyProteinsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const dailyProteins = event.target.value;
+  const handleDailyProteinsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const dailyProteins = parseFloat(event.target.value);
     setDailyProteins(dailyProteins);
   };
 
-  const handleDailyFatsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const dailyFats = event.target.value;
+  const handleDailyFatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const dailyFats = parseFloat(event.target.value);
     setDailyFats(dailyFats);
+  };
+
+  const updateUser = async () => {
+    const updatedData = {
+      name,
+      password,
+      kcalxday: dailyCalories,
+      fatxday: dailyFats,
+      proteinxday: dailyProteins,
+    };
+
+    try {
+      const response = await fetch(`${api_url}/user/${email}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        alert("Datos actualizados correctamente");
+      } else {
+        alert("Error al actualizar los datos");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error en el servidor. Por favor intente de nuevo.");
+    }
   };
 
   function onClickSave(e: React.MouseEvent<HTMLButtonElement>) {
@@ -74,14 +121,12 @@ function Settings() {
       dailyProteins &&
       dailyFats
     ) {
-      alert("Datos guardados correctamente");
+      updateUser();  // Call the update function on save
     }
   }
 
   function onClickDelete(e: React.MouseEvent<HTMLButtonElement>) {
-    const confirmed = window.confirm(
-      "¿Estás seguro de que deseas borrar tu cuenta?"
-    );
+    const confirmed = window.confirm("¿Estás seguro de que deseas borrar tu cuenta?");
     if (confirmed) {
       alert("Cuenta eliminada correctamente");
       navigateTo("logout");
@@ -126,7 +171,7 @@ function Settings() {
                 <TextField
                   label="Meta de calorías diaria (kcal)"
                   placeholder="0.00"
-                  value={dailyCalories}
+                  value={dailyCalories.toString()}  // Asegúrate de que es un string
                   infoMessage="Calcula tu tasa metabólica basal en la siguiente página y toma una decisión en base a tus necesidades."
                   infoLinkURL="https://es.calcuworld.com/salud/metabolismo-basal/"
                   onChange={handleDailyCaloriesChange}
@@ -134,25 +179,21 @@ function Settings() {
                 <TextField
                   label="Meta de proteínas diaria (g)"
                   placeholder="0"
-                  value={dailyProteins}
-                  infoMessage="La Organización Mundial de la Salud (OMS) recomienda consumir al menos 0,8 gramos de proteína por kilogramo de peso corporal al día. Pero puedes modificarlo en base a tus requerimientos. "
+                  value={dailyProteins.toString()}  // Asegúrate de que es un string
+                  infoMessage="La Organización Mundial de la Salud (OMS) recomienda consumir al menos 0,8 gramos de proteína por kilogramo de peso corporal al día. Pero puedes modificarlo en base a tus requerimientos."
                   onChange={handleDailyProteinsChange}
                 />
                 <TextField
                   label="Meta de grasas diaria (g)"
                   placeholder="0"
                   infoMessage="La Organización Mundial de la Salud (OMS) recomienda que el consumo de grasas no supere el 30% de las calorías totales diarias."
-                  value={dailyFats}
+                  value={dailyFats.toString()}  // Asegúrate de que es un string
                   onChange={handleDailyFatsChange}
                 />
 
                 <div className="space-y-5">
                   <Button type="solid" button="secondary" onClick={onClickSave}>
                     Guardar
-                  </Button>
-
-                  <Button type="solid" button="error" onClick={onClickDelete}>
-                    Borrar Cuenta
                   </Button>
                 </div>
               </div>
