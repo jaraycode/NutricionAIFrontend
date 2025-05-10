@@ -19,6 +19,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.getItem("activeItem")
   );
 
+
   useEffect(() => {
     if (activeItem) {
       localStorage.setItem("activeItem", activeItem);
@@ -30,6 +31,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({
   const navigateTo = (item: string) => {
     if (item === "logout") {
       setActiveItem("dashboard");
+      localStorage.removeItem("user");
       navigate("/");
     } else {
       setActiveItem(item);

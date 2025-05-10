@@ -7,6 +7,8 @@ import PasswordTextField from "../components/passwordTextField";
 import Button from "../components/button";
 import { useNavigate } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState("");
@@ -22,9 +24,29 @@ function Login() {
     setPassword(password);
   };
 
-  function onClick(e: React.MouseEvent<HTMLButtonElement>) {
-    navigate("/dashboard");
-  }
+  const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (email && password) {
+      try {
+        const response = await fetch(`${apiUrl}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          const user = await response.text();
+          localStorage.setItem("user", JSON.stringify({ email }));
+          navigate("/dashboard");
+        } else {
+          console.error("Login failed");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
 
   return (
     <>
